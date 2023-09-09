@@ -1,8 +1,12 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const DATABASE_URL = process.env.DATABASE_URL;
 const { countConnection } = require('../helpers/check.connect');
+const {
+  db: { host, port, name },
+} = require('../configs/config.mongodb');
+
+const connectUri = `mongodb://${host}:${port}/${name}`;
 
 class Database {
   constructor() {
@@ -15,8 +19,10 @@ class Database {
       mongoose.set('debug', { color: true });
     }
 
+    console.log(connectUri);
+
     mongoose
-      .connect(DATABASE_URL, {
+      .connect(connectUri, {
         maxPoolSize: 50,
       })
       .then(() => {
