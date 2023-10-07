@@ -42,7 +42,7 @@ class TokenKeyService {
   };
 
   static findByUserId = async (userId) => {
-    return await tokenKeyModel.findOne({ user: userId }).lean();
+    return await tokenKeyModel.findOne({ user: userId });
   };
 
   static removeKeyById = async (id) => {
