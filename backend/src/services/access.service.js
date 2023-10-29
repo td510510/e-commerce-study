@@ -12,6 +12,7 @@ const {
   ForbiddenError,
 } = require('../core/error.response');
 const { findByEmail } = require('./shop.service');
+const { error } = require('node:console');
 
 const RoleShop = {
   SHOP: 'SHOP',
@@ -29,7 +30,6 @@ class AccessService {
     const foundToken = await TokenKeyService.findByRefreshTokenUsed(
       refreshToken
     );
-    console.log('found token', foundToken);
     if (foundToken) {
       // decode: Check who is accessing
       const { userId, email } = await verifyJWT(
@@ -83,7 +83,9 @@ class AccessService {
 
     if (keyStore.refreshTokenUsed.includes(refreshToken)) {
       await TokenKeyService.deleteKeyById(userId);
-      throw new ForbiddenError('Something went wrong! Please try login again');
+      throw new AuthFailureError(
+        'Something went wrong! Please try login again'
+      );
     }
 
     if (keyStore.refreshToken !== refreshToken) {
